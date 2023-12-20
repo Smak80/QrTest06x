@@ -22,7 +22,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     var qrData by mutableStateOf("")
 
-    fun scanQr(type: ScanType, activity: ComponentActivity? = null){
+    fun scanQr(){
         qrScanner.startScan()
             .addOnSuccessListener { barcode ->
                 qrData = barcode.rawValue.toString()
