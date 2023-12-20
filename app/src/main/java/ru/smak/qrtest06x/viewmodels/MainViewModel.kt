@@ -2,7 +2,6 @@ package ru.smak.qrtest06x.viewmodels
 
 import android.app.Application
 import android.graphics.Bitmap
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,13 +11,14 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import ru.smak.qrtest06x.ImageLoader
 import ru.smak.qrtest06x.R
-import ru.smak.qrtest06x.ScanType
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val qrScanner by lazy{
         GmsBarcodeScanning.getClient(app.applicationContext)
     }
+
+    val imageLoader: ImageLoader = ImageLoader(::scanFileQr)
 
     var qrData by mutableStateOf("")
 
@@ -30,6 +30,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             .addOnFailureListener {
                 qrData = getApplication<Application>().getString(R.string.qr_error)
             }
+    }
+
+    fun showFileSelector(){
+        imageLoader.loadImageAsync()
     }
 
     fun scanFileQr(pic: Bitmap?) {

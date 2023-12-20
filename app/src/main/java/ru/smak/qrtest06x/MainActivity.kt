@@ -21,13 +21,12 @@ import ru.smak.qrtest06x.viewmodels.MainViewModel
 class MainActivity : ComponentActivity() {
 
     private val mvm: MainViewModel by viewModels()
-    private lateinit var imageLoader: ImageLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        imageLoader = ImageLoader(this){
-            mvm.scanFileQr(it)
-        }
+
+        mvm.imageLoader.registerForResult(this)
+
         setContent {
             QrTest06xTheme {
                 // A surface container using the 'background' color from the theme
@@ -40,9 +39,9 @@ class MainActivity : ComponentActivity() {
                         Modifier.fillMaxSize(),
                     ){
                         if (it == ScanType.CAMERA)
-                            mvm.scanQr(it, this)
+                            mvm.scanQr()
                         else
-                            imageLoader.loadAsync()
+                            mvm.showFileSelector()
                     }
                 }
             }

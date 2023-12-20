@@ -9,13 +9,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 
 class ImageLoader(
-    parentActivity: ComponentActivity,
     private val onLoad: (Bitmap?)->Unit,
-) {
+){
 
-    private val resultLauncher: ActivityResultLauncher<Intent?>
+    private var resultLauncher: ActivityResultLauncher<Intent?>? = null
 
-    init{
+    fun registerForResult(
+        parentActivity: ComponentActivity,
+    ){
         resultLauncher = parentActivity
             .registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
@@ -36,11 +37,12 @@ class ImageLoader(
             }
     }
 
-    fun loadAsync(){
-        resultLauncher.launch(
-        Intent().apply {
-            type = "image/*"
-            action = Intent.ACTION_GET_CONTENT
-        })
+    fun loadImageAsync(){
+        resultLauncher?.launch(
+            Intent().apply {
+                type = "image/*"
+                action = Intent.ACTION_GET_CONTENT
+            }
+        )
     }
 }
